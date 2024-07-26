@@ -111,18 +111,6 @@ model.save_pretrained(output_dir)
 tokenizer.save_pretrained(output_dir)
 print(f"Model saved to {output_dir}")
 
-def load_finetuned_model(model_path):
-    loaded_model = AutoModelForSeq2SeqLM.from_pretrained(model_path, low_cpu_mem_usage=True)
-    loaded_model.to(device)
-    loaded_tokenizer = AutoTokenizer.from_pretrained(model_path)
-    return loaded_model, loaded_tokenizer
-
-loaded_model, loaded_tokenizer = load_finetuned_model(output_dir)
-
-def generate_text(prompt, max_length=100):
-    input_ids = loaded_tokenizer(prompt, return_tensors="pt").input_ids.to(device)
-    outputs = loaded_model.generate(input_ids, max_length=max_length)
-    return loaded_tokenizer.decode(outputs[0], skip_special_tokens=True)
 
 prompt = "Summarize the key points of the text you were trained on."
 generated_text = generate_text(prompt)
